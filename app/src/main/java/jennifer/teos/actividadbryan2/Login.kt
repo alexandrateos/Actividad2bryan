@@ -40,7 +40,7 @@ class Login : AppCompatActivity() {
 
                 val objConexion = ClaseConexion().cadenaConexion()
 
-                val comprobarUsuario = objConexion?.prepareStatement("select * from usuarios WHERE nombreUsuario = ? AND contrasena = ?")!!
+                val comprobarUsuario = objConexion?.prepareStatement("select * from usuarios WHERE nombreUsuario = ? AND clave = ?")!!
                 comprobarUsuario.setString(1, txtUsuarioLogin.text.toString())
                 comprobarUsuario.setString(2, txtContrasenaLogin.text.toString())
 

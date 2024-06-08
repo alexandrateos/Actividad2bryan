@@ -35,9 +35,9 @@ class Register : AppCompatActivity() {
 
         btnCrearCuenta.setOnClickListener {
             val nombreUsuario = txtCrearUsuario.text.toString()
-            val contrasena = txtCrearContrasena.text.toString()
+            val clave = txtCrearContrasena.text.toString()
 
-            if (nombreUsuario.isBlank() || contrasena.isBlank()) {
+            if (nombreUsuario.isBlank() || clave.isBlank()) {
                 Toast.makeText(this@Register, "Nombre de usuario y contraseña no pueden estar vacíos", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
@@ -50,7 +50,7 @@ class Register : AppCompatActivity() {
                         val crearUsuario = objConexion.prepareStatement("INSERT INTO usuarios (UUID_Usuario, nombreUsuario, clave) VALUES (?, ?, ?)")
                         crearUsuario.setString(1, UUID.randomUUID().toString())
                         crearUsuario.setString(2, nombreUsuario)
-                        crearUsuario.setString(3, contrasena)
+                        crearUsuario.setString(3, clave)
                         crearUsuario.executeUpdate()
 
                         withContext(Dispatchers.Main) {

@@ -2,6 +2,7 @@ package Modelo
 
 data class listaTickets (
 
+    val uuid: String,
     val numero: Int,
     val title: String,
     val descripcion: String,
@@ -10,7 +11,5 @@ data class listaTickets (
     val creation_date: Int,
     val status: String,
     val completation_date: Int,
-
-
 
     )

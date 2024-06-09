@@ -11,6 +11,7 @@ import jennifer.teos.actividadbryan2.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 class Adaptador(private var Datos: List<listaTickets>): RecyclerView.Adapter<ViewHolder>() {
 
@@ -38,10 +39,29 @@ class Adaptador(private var Datos: List<listaTickets>): RecyclerView.Adapter<Vie
         }
 
         Datos = listaDatos.toList()
-
         notifyItemRemoved(posicion)
         notifyDataSetChanged()
     }
+
+    fun actualizarListadoDespuesDeEditar(uuid: String, nuevoTitle: String){
+
+        val identificador = Datos.indexOfFirst { it.uuid = uuid }
+
+        Datos[identificador].title = nuevoTitle
+
+        notifyItemChanged(identificador)
+    }
+
+
+    fun editarTicket(nuevoTitle: String, uuid: String){
+
+        GlobalScope.launch(Dispatchers.IO){
+            val objConexion = ClaseConexion().cadenaConexion()
+
+            val updateTicket = objConexion?.prepareStatement("update tickets set title = ? where uuid = ?")!!
+        }
+    }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
        val vista = LayoutInflater.from(parent.context).inflate(R.layout.activity_item_card, parent, false)

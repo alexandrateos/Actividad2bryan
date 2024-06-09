@@ -13,9 +13,12 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
 import Modelo.listaTickets
 import Modelo.ClaseConexion
+import RecyclerViewHelpers.Adaptador
 import androidx.core.view.WindowInsetsCompat.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class Dashboard : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,16 +47,36 @@ class Dashboard : AppCompatActivity() {
 
         fun obtenerTickets(): List<listaTickets>{
 
-            val objConexion = ClaseConexion.cadenaConexion()
+            val objConexion = ClaseConexion().cadenaConexion()
             
             val statement = objConexion?.createStatement()
-            val resultSet = statement?.executeQuery("select * from tickets")
+            val resultSet = statement?.executeQuery("select * from tickets")!!
 
             val listadoTickets = mutableListOf<listaTickets>()
 
             while (resultSet.next()){
-                val numero = resultSet.getString("numero")
+                val numero = resultSet.getInt("numero")
+                val title = resultSet.getString("title")
+                val descripcion = resultSet.getString("descripcion")
+                val author = resultSet.getString("author")
+                val email = resultSet.getString("email")
+                val creation_date = resultSet.getInt("creation_date")
+                val status = resultSet.getString("status")
+                val completion_date = resultSet.getInt("completion_date")
+                val tickets = listaTickets(numero, title, descripcion, author, email, creation_date, status, completion_date)
+                listadoTickets.add(tickets)
 
+            }
+            return listadoTickets
+        }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val ejecutarFuncion = obtenerTickets()
+
+
+            withContext(Dispatchers.Main){
+                val miAdaptador = Adaptador(ejecutarFuncion)
+                rcvDatos.adapter = miAdaptador
             }
         }
 

@@ -43,15 +43,15 @@ class Adaptador(private var Datos: List<listaTickets>): RecyclerView.Adapter<Vie
         notifyDataSetChanged()
     }
 
+
     fun actualizarListadoDespuesDeEditar(uuid: String, nuevoTitle: String){
 
-        val identificador = Datos.indexOfFirst { it.uuid = uuid }
+        val identificador = Datos.indexOfFirst { it.uuid == uuid }
 
         Datos[identificador].title = nuevoTitle
 
         notifyItemChanged(identificador)
     }
-
 
     fun editarTicket(nuevoTitle: String, uuid: String){
 

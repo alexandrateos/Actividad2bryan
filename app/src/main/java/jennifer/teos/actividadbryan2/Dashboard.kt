@@ -1,10 +1,21 @@
 package jennifer.teos.actividadbryan2
 
+
+
 import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.CoroutineScope
+import Modelo.listaTickets
+import Modelo.ClaseConexion
+import androidx.core.view.WindowInsetsCompat.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class Dashboard : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -12,9 +23,63 @@ class Dashboard : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_dashboard)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val systemBars = insets.getInsets(Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        val txtNumTicket = findViewById<EditText>(R.id.txtNumTicket)
+        val txtTitulo = findViewById<EditText>(R.id.txtTitulo)
+        val txtDescTicket = findViewById<EditText>(R.id.txtDescTicket)
+        val txtAutor = findViewById<EditText>(R.id.txtAutor)
+        val txtEmail = findViewById<EditText>(R.id.txtEmail)
+        val txtFechaCreacion = findViewById<EditText>(R.id.txtFechaCreacion)
+        val txtEstatus = findViewById<EditText>(R.id.txtEstatus)
+        val txtFechaFinalizacion = findViewById<EditText>(R.id.txtFechaFinalizacion)
+        val btnCrearTicket = findViewById<Button>(R.id.btnCrearTicket)
+        val rcvDatos = findViewById<RecyclerView>(R.id.rcvDatos)
+
+
+        rcvDatos.layoutManager = LinearLayoutManager(this)
+
+        fun obtenerTickets(): List<listaTickets>{
+
+            val objConexion = ClaseConexion.cadenaConexion()
+            
+            val statement = objConexion?.createStatement()
+            val resultSet = statement?.executeQuery("select * from tickets")
+
+            val listadoTickets = mutableListOf<listaTickets>()
+
+            while (resultSet.next()){
+                val numero = resultSet.getString("numero")
+
+            }
+        }
+
+        btnCrearTicket.setOnClickListener{
+            CoroutineScope(Dispatchers.IO).launch {
+
+                val objConexion = ClaseConexion().cadenaConexion()
+                val addTicket = objConexion?.prepareStatement("insert into tickets (numero, title, descripcion, author, email, creation_date, status, completion_date) values (?, ?, ?, ?, ?, ?, ?, ?)")!!
+
+                addTicket.setInt(1, txtNumTicket.text.toString().toInt())
+                addTicket.setString(2, txtTitulo.text.toString())
+                addTicket.setString(3, txtDescTicket.text.toString())
+                addTicket.setString(4, txtAutor.text.toString())
+                addTicket.setString(5, txtEmail.text.toString())
+                addTicket.setInt(6, txtFechaCreacion.text.toString().toInt())
+                addTicket.setString(7, txtEstatus.text.toString())
+                addTicket.setInt(8, txtFechaFinalizacion.text.toString().toInt())
+                addTicket.executeUpdate()
+            }
+        }
+
     }
+
+
+
+
+
+
 }

@@ -1,7 +1,6 @@
 package jennifer.teos.actividadbryan2
 
 import Modelo.ClaseConexion
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -34,7 +33,6 @@ class Login : AppCompatActivity() {
         btnEntrar.setOnClickListener{
 
             val pantallaDashboard = Intent(this, Dashboard::class.java)
-            val pantallaDashboardAdmin = Intent(this, DashboardAdmin::class.java) // Nueva pantalla para el administrador
 
             GlobalScope.launch(Dispatchers.IO){
 
